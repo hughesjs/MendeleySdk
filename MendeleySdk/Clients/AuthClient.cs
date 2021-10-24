@@ -1,63 +1,65 @@
 using System;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using MendeleySdk.Helpers.Platform;
-using WebWindowNetCore;
 
 namespace MendeleySdk.Clients
 {
     public class AuthClient
     {
-        private const string Prefix = "http://localhost:5000/oauth/";
-        private const string Response = "<html><body><h1>Successfully Authorised</h1></body></html>";
-        private readonly byte[] _buf = System.Text.Encoding.UTF8.GetBytes(Response);
-        //TODO - This should not be here
-        public string GetAuthUrl()
+        //TODO - Put all of this in appsettings
+        private const string RedirectUrl = "http://localhost:5000/oauth/";
+        private const string AuthBase = "https://api.mendeley.com/oauth/authorize";
+        private const string ResponseType = "code";
+        private const string Scope = "all";
+        private const int ClientId = 10949;
+        
+        private readonly ReadOnlyMemory<byte> _buf = System.Text.Encoding.UTF8.GetBytes("<html><body><h1>Successfully Authorised</h1></body></html>");
+        
+        private string GetAuthUrl()
         {
-            const string authBase = "https://api.mendeley.com/oauth/authorize";
-            var clientId = 10949;
-            var redirect_uri = "http://localhost:5000/oauth";
-            var response_type = "code";
-            var scope = "all";
-
             NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
-            queryString.Add("client_id", clientId.ToString());
-            queryString.Add("redirect_uri", redirect_uri);
-            queryString.Add("response_type", response_type);
-            queryString.Add("scope", scope);
+            queryString.Add("client_id", ClientId.ToString());
+            queryString.Add("redirect_uri", RedirectUrl);
+            queryString.Add("response_type", ResponseType);
+            queryString.Add("scope", Scope);
 
-            string authUrl = $"{authBase}?{queryString}";
-            return authUrl;
+            return $"{AuthBase}?{queryString}";
         }
 
         public async Task<string> LoginInteractive()
         {
-            string url = GetAuthUrl();
-            OpenHelper.OpenBrowser(url);
-            var token = await ListenForResponse();
-            return token;
+            //TODO - needs cancellation
+            OpenHelper.OpenBrowser(GetAuthUrl());
+            return await ListenForResponse();
         }
 
-        public async Task<string> ListenForResponse()
+        private async Task<string> ListenForResponse()
         {
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add(Prefix);
+            HttpListener listener = new();
+            listener.Prefixes.Add(RedirectUrl);
+            
             listener.Start();
-            var ctx = await listener.GetContextAsync();
-            var queryString = ctx.Request.QueryString;
-            var token = queryString["code"];
+            HttpListenerContext ctx = await listener.GetContextAsync();
+            
+            NameValueCollection queryString = ctx.Request.QueryString;
+            string? token = queryString["code"];
 
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new AuthenticationException("OAuth did not return a token");
+            }
+            
             //Send response
-            var outStream = ctx.Response.OutputStream;
-            await outStream.WriteAsync(_buf, 0, _buf.Length);
+            Stream outStream = ctx.Response.OutputStream;
+            await outStream.WriteAsync(_buf);
+            
             outStream.Close();
             listener.Stop();
+            
             return token;
         }
     }
