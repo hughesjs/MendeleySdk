@@ -15,7 +15,8 @@ namespace MendeleySdk.Clients
     public class AuthClient
     {
         private const string Prefix = "http://localhost:5000/oauth/";
-
+        private const string Response = "<html><body><h1>Successfully Authorised</h1></body></html>";
+        private readonly byte[] _buf = System.Text.Encoding.UTF8.GetBytes(Response);
         //TODO - This should not be here
         public string GetAuthUrl()
         {
@@ -50,8 +51,13 @@ namespace MendeleySdk.Clients
             listener.Start();
             var ctx = await listener.GetContextAsync();
             var queryString = ctx.Request.QueryString;
-            
             var token = queryString["code"];
+
+            //Send response
+            var outStream = ctx.Response.OutputStream;
+            await outStream.WriteAsync(_buf, 0, _buf.Length);
+            outStream.Close();
+            listener.Stop();
             return token;
         }
     }
