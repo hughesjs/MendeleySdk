@@ -1,3 +1,0 @@
-[submodule "ref/mendeley-api-python-example"]
-	path = ref/mendeley-api-python-example
-	url = git@github.com:Mendeley/mendeley-api-python-example.git
