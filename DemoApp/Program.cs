@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
-using MendeleySdk.Clients;
+using System.Threading;
+using MendeleySdk.Authorisation;
+using MendeleySdk.Options;
+using Microsoft.Extensions.Options;
 
 namespace DemoApp
 {
@@ -8,9 +12,10 @@ namespace DemoApp
     {
         static void Main(string[] args)
         {
-            AuthClient client = new AuthClient();
-            string token = client.LoginInteractive().Result;
-            Console.WriteLine(token);
+            AuthorisationManager manager = new(new(new(), Options.Create(new OAuthOptions())),Options.Create(new OAuthOptions()));
+            CancellationTokenSource tokenSource = new();
+            tokenSource.CancelAfter(TimeSpan.FromMinutes(1));
+            Console.WriteLine(manager.GetToken(tokenSource.Token).Result);
         }
     }
 }
