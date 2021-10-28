@@ -9,16 +9,28 @@ namespace MendeleySdk.Helpers.Platform
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}"));
+                StartWithOutputRedirectToNull("cmd", $"/c start {url}");
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                Process.Start("xdg-open", url);
+                StartWithOutputRedirectToNull("xdg-open", url);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                Process.Start("open", url);
+                StartWithOutputRedirectToNull("open", url);
             }
+        }
+
+        private static void StartWithOutputRedirectToNull(string fileName, string args)
+        {
+            ProcessStartInfo psi = new()
+                                   {
+                                       FileName = fileName,
+                                       Arguments = args,
+                                       RedirectStandardOutput = true,
+                                       RedirectStandardError = true
+                                   };
+            Process.Start(psi);
         }
     }
 }
