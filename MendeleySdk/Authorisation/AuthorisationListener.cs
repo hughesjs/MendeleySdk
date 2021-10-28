@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace MendeleySdk.Authorisation
 {
-    public sealed class AuthorisationListener : IDisposable // TODO - Make this internal
+    public sealed class AuthorisationListener : IAuthorisationListener // TODO - Make this internal
     {
         private readonly ReadOnlyMemory<byte> _buf = System.Text.Encoding.UTF8.GetBytes("<html><body><h1>Successfully Authorised</h1></body></html>");
 
@@ -48,5 +48,10 @@ namespace MendeleySdk.Authorisation
         {
             ((IDisposable)_listener).Dispose();
         }
+    }
+
+    public interface IAuthorisationListener : IDisposable
+    {
+        public Task<string> ListenForOAuthToken(CancellationToken cancelled);
     }
 }

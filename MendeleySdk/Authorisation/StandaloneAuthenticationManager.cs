@@ -8,14 +8,19 @@ using Microsoft.Extensions.Options;
 
 namespace MendeleySdk.Authorisation
 {
-    public sealed class AuthorisationManager: IDisposable
+    /// <summary>
+    /// Use this to get an OAuth token for a single-user interactively.
+    /// It will open up a browser window and start listening on the configured port.
+    /// Don't use this server-side.
+    /// </summary>
+    public sealed class StandaloneAuthenticationManager: IAuthorisationManager, IDisposable
     {
         private static string? _currentToken;
 
-        private readonly AuthorisationListener _listener;
+        private readonly IAuthorisationListener _listener;
         private readonly IOptions<OAuthOptions> _options;
         
-        public AuthorisationManager(AuthorisationListener listener, IOptions<OAuthOptions> options)
+        public StandaloneAuthenticationManager(IAuthorisationListener listener, IOptions<OAuthOptions> options)
         {
             _listener = listener;
             _options = options;
@@ -46,5 +51,10 @@ namespace MendeleySdk.Authorisation
         {
             _listener.Dispose();
         }
+    }
+
+    public interface IAuthorisationManager
+    {
+        public Task<string> GetToken(CancellationToken? cToken = null);
     }
 }
