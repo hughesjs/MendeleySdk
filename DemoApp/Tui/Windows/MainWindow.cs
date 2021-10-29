@@ -14,8 +14,6 @@ namespace DemoApp.Tui.Windows
             LayoutStyle = LayoutStyle.Computed;
             Add(new MainMenu());
             Add(new MainContent());
-            
-            
         }
     }
 }

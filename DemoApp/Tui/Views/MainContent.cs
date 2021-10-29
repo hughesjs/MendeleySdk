@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using DemoApp.Tui.Views.Dialogs;
 using MendeleySdk.Authorisation;
 using MendeleySdk.Options;
 using Microsoft.Extensions.Options;
@@ -22,9 +23,22 @@ namespace DemoApp.Tui.Views
 
         private void CreateAuthWindow()
         {
-            Button authButton = new(1, 1, "Login With OAuth2 (Opens in Browser)");
-            authButton.Clicked += async () => await LogInWithOAuth();
-            Add(authButton);
+            Button oauthButton = new(1, 1, "Login With OAuth2 (Opens in Browser)");
+            Button legacyButton = new(1, 2, "Login With Legacy Authentication");
+            oauthButton.Clicked += async () => await LogInWithOAuth();
+            legacyButton.Clicked += () =>
+                                    {
+                                        LegacyLoginDialog lld = new();
+                                        Add(lld);
+                                        lld.FocusFirst();
+                                        lld.Submitted += async (_, e) =>
+                                                         {
+                                                             Remove(lld);
+                                                             await LogInWithLegacy(e.username, e.password);
+                                                         };
+                                    };
+            Add(oauthButton);
+            Add(legacyButton);
         }
 
         private async Task LogInWithOAuth()
@@ -33,6 +47,11 @@ namespace DemoApp.Tui.Views
             StandaloneAuthenticationManager authManager = new(new AuthorisationListener(new(), opts), opts); 
             string token = await authManager.GetToken(); //TODO - Async this shit
             Add(new Label($"OAuth2 Token: {token}") { X = Pos.Center(), Y = Pos.Center() });
+        }
+
+        private async Task LogInWithLegacy(string username, string password)
+        {
+            ;
         }
     }
 }
