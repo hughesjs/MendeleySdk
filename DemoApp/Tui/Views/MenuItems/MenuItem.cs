@@ -1,15 +1,18 @@
 using Terminal.Gui;
 
-abstract class MenuItem
+namespace DemoApp.Tui.Views.MenuItems
 {
-    private Toplevel Top;
-    private Window Window;
-
-    protected virtual void Init(Toplevel? top = null)
+    abstract class MenuItem
     {
-        Top = top ?? Application.Top;
+        private Toplevel Top;
+        private Window Window;
 
-        Window = new Window("M");
-        Top.Add(Window);
+        protected virtual void Init(Toplevel? top = null)
+        {
+            Top = top ?? Application.Top;
+
+            Window = new Window("M");
+            Top.Add(Window);
+        }
     }
 }

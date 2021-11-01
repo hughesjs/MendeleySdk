@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using DemoApp.Tui.Views.Dialogs;
 using MendeleySdk.Authorisation;
+using MendeleySdk.Authorisation.Models;
+using MendeleySdk.Authorisation.Services;
 using MendeleySdk.Options;
 using Microsoft.Extensions.Options;
 using Terminal.Gui;
@@ -11,8 +13,11 @@ namespace DemoApp.Tui.Views
 {
     public class MainContent : FrameView
     {
-        public MainContent() : base("Content")
+        private readonly IAuthenticationManager _authManager;
+        public MainContent(IAuthenticationManager authManager) : base("Content")
         {
+            _authManager = authManager;
+            
             Y = 1;
             X = 25;
             Width = Dim.Fill();
@@ -43,9 +48,7 @@ namespace DemoApp.Tui.Views
 
         private async Task LogInWithOAuth()
         {
-            IOptions<OAuthOptions> opts = Options.Create<OAuthOptions>(new()); // TODO - DI this crap
-            StandaloneAuthenticationManager authManager = new(new AuthorisationListener(new(), opts), opts); 
-            string token = await authManager.GetToken(); //TODO - Async this shit
+            OAuthToken token = await _authManager.GetToken(); //TODO - Async this shit
             Add(new Label($"OAuth2 Token: {token}") { X = Pos.Center(), Y = Pos.Center() });
         }
 

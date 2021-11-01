@@ -6,6 +6,8 @@ namespace MendeleySdk.Options
         public string AuthBase { get; init; } = "https://api.mendeley.com/oauth/authorize";
         public string ResponseType { get; init; } = "code";
         public string Scope { get; init; } = "all";
-        public int ClientId { get; init; } = 10949;
+        public int ApplicationId { get; init; } = 10949;
+
+        public string Secret { get; init; } = "8l6PIvjclztWUF31"; // TODO - remove this and invalidate when live
     }
 }

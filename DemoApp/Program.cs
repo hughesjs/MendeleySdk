@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
+using DemoApp.Tui.Views;
+using DemoApp.Tui.Views.Dialogs;
 using DemoApp.Tui.Windows;
 using MendeleySdk.Authorisation;
+using MendeleySdk.Authorisation.Services;
+using MendeleySdk.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Terminal.Gui;
 
 namespace DemoApp
@@ -13,17 +21,18 @@ namespace DemoApp
     {
         static void Main(string[] args)
         {
-            // IHostBuilder builder = CreateHostBuilder(args);
-            // IHost b = builder.Build();
+            // Application.Init();
+            
+            IHostBuilder builder = CreateHostBuilder(args);
+            IHost b = builder.Build();
 
-            Application.Run<MainWindow>();
-            
-            // IAuthorisationManager? manager = b.Services.GetService<IAuthorisationManager>();
-            
-            // //StandaloneAuthenticationManager manager = new(new AuthorisationListener(new(), Options.Create(new OAuthOptions())),Options.Create(new OAuthOptions()));
-            // CancellationTokenSource tokenSource = new();
-            // tokenSource.CancelAfter(TimeSpan.FromMinutes(1));
-            // Console.WriteLine(manager.GetToken(tokenSource.Token).Result);
+            var manager = b.Services.GetService<IAuthenticationManager>();
+            _ = manager.GetToken().Result;
+
+            // MainWindow main = b.Services.GetService<MainWindow>() ?? throw new("AGH!");
+            //
+            // Application.Top.Add(main);
+            // Application.Run();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)
@@ -35,8 +44,23 @@ namespace DemoApp
         private static void ConfigureServices(HostBuilderContext hbc, IServiceCollection services)
         {
             services.AddTransient<HttpListener>();
-            services.AddTransient<IAuthorisationListener, AuthorisationListener>();
-            services.AddSingleton<IAuthorisationManager, StandaloneAuthenticationManager>();
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainContent>();
+            services.AddSingleton<MainMenu>();
+            
+            
+            services.AddTransient<LegacyLoginDialog>();
+            services.AddTransient<IAuthenticationListener, AuthenticationListener>();
+            services.AddTransient<IAuthenticationManager, StandaloneAuthenticationManager>();
+
+            var oauth = hbc.Configuration.Get<OAuthOptions>();
+            services.AddHttpClient<IAuthenticationExchangeClient, AuthenticationExchangeClient>(c =>
+                                                                                                {
+                                                                                                    c.BaseAddress = new("https://api.mendeley.com/");
+                                                                                                    string authString = $"{oauth.ApplicationId}:{oauth.Secret}";
+                                                                                                    string encoded = Convert.ToBase64String(Encoding.ASCII.GetBytes(authString));
+                                                                                                    c.DefaultRequestHeaders.Authorization = new("Basic", encoded);
+                                                                                                });
         }
     }
 }

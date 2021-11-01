@@ -8,27 +8,32 @@ using System.Threading.Tasks;
 using MendeleySdk.Options;
 using Microsoft.Extensions.Options;
 
-namespace MendeleySdk.Authorisation
+namespace MendeleySdk.Authorisation.Services
 {
-    public sealed class AuthorisationListener : IAuthorisationListener // TODO - Make this internal
+    public sealed class AuthenticationListener : IAuthenticationListener // TODO - Make this internal
     {
         private readonly ReadOnlyMemory<byte> _buf = System.Text.Encoding.UTF8.GetBytes("<html><body><h1>Successfully Authorised</h1></body></html>");
 
         private readonly HttpListener _listener;
 
-        public AuthorisationListener(HttpListener listener, IOptions<OAuthOptions> options)
+        public AuthenticationListener(HttpListener listener, IOptions<OAuthOptions> options)
         {
             _listener = listener;
             listener.Prefixes.Add(options.Value.RedirectUrl);
         }
         
-        public async Task<string> ListenForOAuthToken(CancellationToken cancelled)
+        public async Task<string> ListenForOAuthCode(string? state, CancellationToken cancelled)
         {
             _listener.Start();
             HttpListenerContext ctx = await _listener.GetContextAsync(); //TODO - Make this cancellable
 
             NameValueCollection queryString = ctx.Request.QueryString;
             string? token = queryString["code"];
+            string? stateRec = queryString["state"];
+            if (state != stateRec)
+            {
+                throw new AuthenticationException("Possible CSF attack detected");
+            }
             if (string.IsNullOrEmpty(token))
             {
                 throw new AuthenticationException("OAuth did not return a token");
@@ -50,8 +55,8 @@ namespace MendeleySdk.Authorisation
         }
     }
 
-    public interface IAuthorisationListener : IDisposable
+    public interface IAuthenticationListener : IDisposable
     {
-        public Task<string> ListenForOAuthToken(CancellationToken cancelled);
+        public Task<string> ListenForOAuthCode(string? state, CancellationToken cancelled);
     }
 }
