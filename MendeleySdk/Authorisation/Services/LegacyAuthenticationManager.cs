@@ -1,7 +1,4 @@
 namespace MendeleySdk.Authorisation.Services
 {
-    public class LegacyAuthenticationManager
-    {
-        
-    }
+    public class LegacyAuthenticationManager { }
 }

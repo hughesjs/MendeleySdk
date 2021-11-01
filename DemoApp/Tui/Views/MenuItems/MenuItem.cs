@@ -2,7 +2,7 @@ using Terminal.Gui;
 
 namespace DemoApp.Tui.Views.MenuItems
 {
-    abstract class MenuItem
+    internal abstract class MenuItem
     {
         private Toplevel Top;
         private Window Window;
@@ -11,7 +11,7 @@ namespace DemoApp.Tui.Views.MenuItems
         {
             Top = top ?? Application.Top;
 
-            Window = new Window("M");
+            Window = new("M");
             Top.Add(Window);
         }
     }

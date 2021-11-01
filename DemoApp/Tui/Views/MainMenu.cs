@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using Terminal.Gui;
-using Terminal.Gui.Graphs;
 
 namespace DemoApp.Tui.Views
 {
-    public sealed class MainMenu: FrameView
+    public sealed class MainMenu : FrameView
     {
-        private readonly string[] _menuItems = new[] { "Authentication", "Collections" };
+        private readonly string[] _menuItems = { "Authentication", "Collections" };
         private readonly ListView _menuListView;
+
         public MainMenu()
         {
             // Setup Window
@@ -24,18 +20,17 @@ namespace DemoApp.Tui.Views
             ShortcutAction = SetFocus;
 
             // Create Left Bar
-            _menuListView = new ListView (_menuItems) {
-                                                          X = 0,
-                                                          Y = 0,
-                                                          Width = Dim.Fill (0),
-                                                          Height = Dim.Fill (0),
-                                                          AllowsMarking = false,
-                                                          CanFocus = true,
-                                                      };
-            
+            _menuListView = new(_menuItems)
+                            {
+                                X = 0,
+                                Y = 0,
+                                Width = Dim.Fill(),
+                                Height = Dim.Fill(),
+                                AllowsMarking = false,
+                                CanFocus = true
+                            };
+
             Add(_menuListView);
-            
-            
         }
     }
 }

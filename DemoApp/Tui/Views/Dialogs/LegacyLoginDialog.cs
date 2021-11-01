@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Options;
 using Terminal.Gui;
 
 namespace DemoApp.Tui.Views.Dialogs
 {
     public class LegacyLoginDialog : Dialog
     {
-        public event EventHandler<(string username, string password)>? Submitted; 
         public LegacyLoginDialog() : base("Legacy Authentication")
         {
             X = Pos.Center();
@@ -18,17 +14,19 @@ namespace DemoApp.Tui.Views.Dialogs
             Build();
         }
 
+        public event EventHandler<(string username, string password)>? Submitted;
+
         private void Build()
         {
-            Label usernameLabel = new Label("Username/Email");
-            
+            Label usernameLabel = new("Username/Email");
+
             TextField usernameText = new()
                                      {
                                          Width = Dim.Fill(),
                                          Y = 1,
                                          CanFocus = true
                                      };
-            Label passwordLabel = new Label("Password (This Will Not Be Hidden)");
+            Label passwordLabel = new("Password (This Will Not Be Hidden)");
             passwordLabel.Y = 3;
 
             TextField passwordText = new()
@@ -45,7 +43,7 @@ namespace DemoApp.Tui.Views.Dialogs
                                       HotKey = Key.Enter
                                   };
             submitButton.Clicked += () => Submitted?.Invoke(this, (usernameText.Text.ToString()!, passwordText.Text.ToString()!));
-            
+
             Add(usernameLabel);
             Add(usernameText);
             Add(passwordLabel);

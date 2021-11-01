@@ -1,12 +1,8 @@
-using System;
-using System.Net;
 using System.Threading.Tasks;
 using DemoApp.Tui.Views.Dialogs;
-using MendeleySdk.Authorisation;
+using MendeleySdk.Authorisation.Interfaces;
 using MendeleySdk.Authorisation.Models;
 using MendeleySdk.Authorisation.Services;
-using MendeleySdk.Options;
-using Microsoft.Extensions.Options;
 using Terminal.Gui;
 
 namespace DemoApp.Tui.Views
@@ -14,10 +10,11 @@ namespace DemoApp.Tui.Views
     public class MainContent : FrameView
     {
         private readonly IAuthenticationManager _authManager;
+
         public MainContent(IAuthenticationManager authManager) : base("Content")
         {
             _authManager = authManager;
-            
+
             Y = 1;
             X = 25;
             Width = Dim.Fill();

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using DemoApp.Tui.Views;
 using Terminal.Gui;
 
@@ -13,13 +12,13 @@ namespace DemoApp.Tui.Windows
         {
             _mainContent = mainContent;
             _mainMenu = mainMenu;
-            
+
             X = 0;
             Y = 1;
             Width = Dim.Fill();
             Height = Dim.Fill();
             LayoutStyle = LayoutStyle.Computed;
-            
+
             Init();
         }
 
