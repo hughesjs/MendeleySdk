@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace MendeleySdk.Helpers.Platform
 {
-    public static class OpenHelper
+    public class OpenHelper : IOpener
     {
-        public static void OpenBrowser(string url)
+        public void OpenBrowser(string url)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

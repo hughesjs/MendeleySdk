@@ -2,11 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>MendeleySdkTests</RootNamespace>
 
         <IsPackable>false</IsPackable>
-
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

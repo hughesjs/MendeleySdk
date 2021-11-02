@@ -1,6 +1,7 @@
+using System;
 using Xunit;
 
-namespace MendeleySdkTests
+namespace MendeleySdk.IntegrationTests
 {
     public class UnitTest1
     {

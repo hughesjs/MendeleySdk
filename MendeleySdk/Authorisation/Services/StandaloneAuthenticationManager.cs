@@ -19,18 +19,16 @@ namespace MendeleySdk.Authorisation.Services
     public sealed class StandaloneAuthenticationManager : IAuthenticationManager, IDisposable
     {
         private readonly IAuthenticationExchangeClient _client;
-
         private readonly IAuthenticationListener _listener;
-
+        private readonly IOpener _opener;
         private readonly IOptions<OAuthOptions> _options;
-        private string? _state;
 
-
-        public StandaloneAuthenticationManager(IAuthenticationListener listener, IAuthenticationExchangeClient client, IOptions<OAuthOptions> options)
+        public StandaloneAuthenticationManager(IAuthenticationListener listener, IAuthenticationExchangeClient client, IOpener opener, IOptions<OAuthOptions> options)
         {
             _listener = listener;
             _options = options;
             _client = client;
+            _opener = opener;
         }
 
         public async Task<OAuthToken> GetToken(CancellationToken? cToken = null) => await LoginInteractive(cToken ?? CancellationToken.None);
@@ -38,21 +36,20 @@ namespace MendeleySdk.Authorisation.Services
 
         private async Task<OAuthToken> LoginInteractive(CancellationToken cToken)
         {
-            OpenHelper.OpenBrowser(GetAuthUrl());
-            string authCode = await _listener.ListenForOAuthCode(_state, cToken);
+            string state = Guid.NewGuid().ToString();
+            _opener.OpenBrowser(GetAuthUrl(state));
+            string authCode = await _listener.ListenForOAuthCode(state, cToken);
             return await _client.SwapAuthCodeForToken(authCode);
         }
 
-        private string GetAuthUrl()
+        private string GetAuthUrl(string state)
         {
-            _state = Guid.NewGuid().ToString();
-
             NameValueCollection queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("client_id", _options.Value.ApplicationId.ToString());
             queryString.Add("redirect_uri", _options.Value.RedirectUrl);
             queryString.Add("response_type", _options.Value.ResponseType);
             queryString.Add("scope", _options.Value.Scope);
-            queryString.Add("state", _state);
+            queryString.Add("state", state);
             return $"{_options.Value.AuthBase}?{queryString}";
         }
         

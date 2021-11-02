@@ -53,7 +53,7 @@ namespace MendeleySdk.Authorisation.Services
             req.RequestUri = new($"{_client.BaseAddress}oauth/token");
             req.Method = HttpMethod.Post;
 
-            var res = await _client.SendAsync(req);
+            HttpResponseMessage res = await _client.SendAsync(req);
             
             OAuthToken? token = await res.Content.ReadFromJsonAsync<OAuthToken>();
             if (token is null)
