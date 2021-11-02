@@ -33,14 +33,8 @@ namespace MendeleySdk.Authorisation.Services
             _client = client;
         }
 
-        public async Task<OAuthToken> GetToken(CancellationToken? cToken = null) =>
-            // TODO - Caching??
-            await LoginInteractive(cToken ?? CancellationToken.None);
-
-        public void Dispose()
-        {
-            _listener.Dispose();
-        }
+        public async Task<OAuthToken> GetToken(CancellationToken? cToken = null) => await LoginInteractive(cToken ?? CancellationToken.None);
+        public async Task<OAuthToken> RefreshToken(OAuthToken token, CancellationToken? cancellation = null) => await _client.RefreshToken(token);
 
         private async Task<OAuthToken> LoginInteractive(CancellationToken cToken)
         {
@@ -60,6 +54,11 @@ namespace MendeleySdk.Authorisation.Services
             queryString.Add("scope", _options.Value.Scope);
             queryString.Add("state", _state);
             return $"{_options.Value.AuthBase}?{queryString}";
+        }
+        
+        public void Dispose()
+        {
+            _listener.Dispose();
         }
     }
 }
