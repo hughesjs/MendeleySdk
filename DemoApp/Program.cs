@@ -1,12 +1,6 @@
-﻿using System;
-using System.Net;
-using System.Text;
-using DemoApp.Extensions;
-using DemoApp.Tui.Views;
-using DemoApp.Tui.Views.Dialogs;
+﻿using DemoApp.Extensions;
+using DemoApp.Services;
 using DemoApp.Tui.Windows;
-using MendeleySdk.Authorisation.Interfaces;
-using MendeleySdk.Authorisation.Services;
 using MendeleySdk.Extensions;
 using MendeleySdk.Options;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +29,8 @@ namespace DemoApp
         {
             services.UseTextUserInterface();
             services.UseMendeleySdk(hbc.Configuration.Get<OAuthOptions>());
+
+            services.AddSingleton<ISessionManager, SimpleSessionManager>();
         }
     }
 }
