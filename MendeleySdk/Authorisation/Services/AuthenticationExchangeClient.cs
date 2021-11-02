@@ -19,11 +19,6 @@ namespace MendeleySdk.Authorisation.Services
         public AuthenticationExchangeClient(HttpClient client, IOptions<OAuthOptions> options)
         {
             _client = client;
-            //_client = new(new LoggingHandler(new HttpClientHandler()));
-            // _client.BaseAddress = new("https://api.mendeley.com/");
-            // string authString = $"{options.Value.ApplicationId}:{options.Value.Secret}";
-            // string encoded = Convert.ToBase64String(Encoding.ASCII.GetBytes(authString));
-            // _client.DefaultRequestHeaders.Authorization = new("Basic", encoded);
             _options = options.Value;
         }
 
