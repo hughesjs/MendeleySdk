@@ -2,6 +2,7 @@
 using DemoApp.Services;
 using DemoApp.Tui.Windows;
 using MendeleySdk.Extensions;
+using MendeleySdk.Helpers.Platform;
 using MendeleySdk.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ namespace DemoApp
             services.UseTextUserInterface();
             services.UseMendeleySdk(hbc.Configuration.Get<OAuthOptions>());
 
+            services.AddTransient<IOpener, OpenHelper>();
             services.AddSingleton<ISessionManager, SimpleSessionManager>();
         }
     }

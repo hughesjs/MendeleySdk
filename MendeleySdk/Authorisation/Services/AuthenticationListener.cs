@@ -34,11 +34,13 @@ namespace MendeleySdk.Authorisation.Services
             string? stateRec = queryString["state"];
             if (state != stateRec)
             {
+                ctx.Response.OutputStream.Close();
                 throw new AuthenticationException("Possible CSF attack detected");
             }
 
             if (string.IsNullOrEmpty(token))
             {
+                ctx.Response.OutputStream.Close();
                 throw new AuthenticationException("OAuth did not return a token");
             }
 

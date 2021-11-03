@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Text;
 using MendeleySdk.Authorisation.Interfaces;
 using MendeleySdk.Authorisation.Services;
@@ -13,6 +14,7 @@ namespace MendeleySdk.Extensions
     {
         public static IServiceCollection UseMendeleySdk(this IServiceCollection services, OAuthOptions options) // Replace options with a parent wrapper if needs be
         {
+            services.AddTransient<HttpListener>();
             services.AddTransient<IAuthenticationListener, AuthenticationListener>();
             services.AddTransient<IAuthenticationManager, StandaloneAuthenticationManager>();
             

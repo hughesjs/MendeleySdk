@@ -5,15 +5,13 @@ using MendeleySdk.Authorisation.Interfaces;
 using MendeleySdk.Authorisation.Models;
 using MendeleySdk.Authorisation.Services;
 using MendeleySdk.Helpers.Platform;
-using MendeleySdk.Options;
-using Microsoft.Extensions.Options;
 using NSubstitute;
 using Shouldly;
 using Xunit;
 
 namespace MendeleySdk.UnitTests.Authorization
 {
-    public class StandaloneAuthenticationManagerTests
+    public class StandaloneAuthenticationManagerTests: AuthTestBase
     {
         private readonly StandaloneAuthenticationManager _authManager;
         
@@ -27,11 +25,9 @@ namespace MendeleySdk.UnitTests.Authorization
 
         public StandaloneAuthenticationManagerTests()
         {
-            Fixture fixture = new();
-            
-            _expectedAuthCode = fixture.Create<string>();
-            _expectedToken = fixture.Create<OAuthToken>();
-            _expectedRefreshToken = fixture.Create<OAuthToken>();
+            _expectedAuthCode = Fixture.Create<string>();
+            _expectedToken = Fixture.Create<OAuthToken>();
+            _expectedRefreshToken = Fixture.Create<OAuthToken>();
 
             _mockListener = Substitute.For<IAuthenticationListener>();
             _mockClient = Substitute.For<IAuthenticationExchangeClient>();
@@ -40,10 +36,8 @@ namespace MendeleySdk.UnitTests.Authorization
             _mockListener.ListenForOAuthCode(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(_expectedAuthCode);
             _mockClient.SwapAuthCodeForToken(Arg.Any<string>()).Returns(_expectedToken);
             _mockClient.RefreshToken(Arg.Any<OAuthToken>()).Returns(_expectedRefreshToken);
-
-            IOptions<OAuthOptions> options = Microsoft.Extensions.Options.Options.Create(fixture.Create<OAuthOptions>());
-
-            _authManager = new(_mockListener, _mockClient, _mockOpener, options);
+            
+            _authManager = new(_mockListener, _mockClient, _mockOpener, OAuthOptions);
         }
 
         [Fact]
