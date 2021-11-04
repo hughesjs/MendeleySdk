@@ -1,4 +1,4 @@
-namespace MendeleySdk.Helpers.Platform
+namespace MendeleySdk.Shared.Helpers.Platform
 {
     public interface IOpener
     {

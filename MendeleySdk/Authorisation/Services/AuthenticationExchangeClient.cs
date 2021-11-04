@@ -5,7 +5,7 @@ using System.Security.Authentication;
 using System.Threading.Tasks;
 using MendeleySdk.Authorisation.Interfaces;
 using MendeleySdk.Authorisation.Models;
-using MendeleySdk.Options;
+using MendeleySdk.Authorisation.Options;
 using Microsoft.Extensions.Options;
 
 namespace MendeleySdk.Authorisation.Services

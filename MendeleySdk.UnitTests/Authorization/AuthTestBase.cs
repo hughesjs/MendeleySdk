@@ -2,7 +2,7 @@ using System.CodeDom;
 using System.Reflection;
 using AutoFixture;
 using AutoFixture.Kernel;
-using MendeleySdk.Options;
+using MendeleySdk.Authorisation.Options;
 using Microsoft.Extensions.Options;
 
 namespace MendeleySdk.UnitTests.Authorization
@@ -31,12 +31,12 @@ namespace MendeleySdk.UnitTests.Authorization
                         {
                             switch (pi.Name)
                             {
-                                case nameof(Options.OAuthOptions.RedirectUrl):
+                                case nameof(Authorisation.Options.OAuthOptions.RedirectUrl):
                                 {
                                     return "http://localhost:10000/oauth/";
                                     break;
                                 }
-                                case nameof(Options.OAuthOptions.AuthBase):
+                                case nameof(Authorisation.Options.OAuthOptions.AuthBase):
                                 {
                                     return "http://localhost:10001/oauth/authorize/";
                                     break;

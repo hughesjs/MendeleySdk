@@ -4,7 +4,7 @@ using AutoFixture;
 using MendeleySdk.Authorisation.Interfaces;
 using MendeleySdk.Authorisation.Models;
 using MendeleySdk.Authorisation.Services;
-using MendeleySdk.Helpers.Platform;
+using MendeleySdk.Shared.Helpers.Platform;
 using NSubstitute;
 using Shouldly;
 using Xunit;

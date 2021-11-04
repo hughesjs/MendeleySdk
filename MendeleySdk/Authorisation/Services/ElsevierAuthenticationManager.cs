@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Web;
 using MendeleySdk.Authorisation.Interfaces;
 using MendeleySdk.Authorisation.Models;
-using MendeleySdk.Helpers.Platform;
-using MendeleySdk.Options;
+using MendeleySdk.Authorisation.Options;
+using MendeleySdk.Shared.Helpers.Platform;
 using Microsoft.Extensions.Options;
 
 namespace MendeleySdk.Authorisation.Services

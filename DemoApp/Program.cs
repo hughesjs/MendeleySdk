@@ -1,9 +1,9 @@
 ﻿using DemoApp.Extensions;
 using DemoApp.Services;
 using DemoApp.Tui.Windows;
+using MendeleySdk.Authorisation.Options;
 using MendeleySdk.Extensions;
-using MendeleySdk.Helpers.Platform;
-using MendeleySdk.Options;
+using MendeleySdk.Shared.Helpers.Platform;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

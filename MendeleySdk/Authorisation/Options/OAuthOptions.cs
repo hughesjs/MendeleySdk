@@ -1,4 +1,4 @@
-namespace MendeleySdk.Options
+namespace MendeleySdk.Authorisation.Options
 {
     public class OAuthOptions
     {

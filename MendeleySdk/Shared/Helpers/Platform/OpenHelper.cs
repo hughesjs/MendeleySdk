@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace MendeleySdk.Helpers.Platform
+namespace MendeleySdk.Shared.Helpers.Platform
 {
     public class OpenHelper : IOpener
     {
