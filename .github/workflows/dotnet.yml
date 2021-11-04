@@ -23,12 +23,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: github-status-action
-      uses: Sibz/github-status-action@v1.1.6
-      with:
-        authToken: ${{secrets.GITHUB_TOKEN}}
-        context: 'Test run'
-        description: 'Passed'
-        state: 'success'
-        sha: ${{github.event.pull_request.head.sha || github.sha}}
-
