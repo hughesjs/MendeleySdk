@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -53,6 +54,7 @@ namespace MendeleySdk.Authorisation.Services
             return $"{_options.Value.AuthBase}?{queryString}";
         }
         
+        [ExcludeFromCodeCoverage]
         public void Dispose()
         {
             _listener.Dispose();

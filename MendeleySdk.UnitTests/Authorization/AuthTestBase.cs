@@ -1,3 +1,4 @@
+using System.CodeDom;
 using System.Reflection;
 using AutoFixture;
 using AutoFixture.Kernel;
@@ -24,11 +25,24 @@ namespace MendeleySdk.UnitTests.Authorization
             {
                 if (request is PropertyInfo pi)
                 {
-                    if (pi.DeclaringType == typeof(OAuthOptions)
-                     && pi.PropertyType == typeof(string)
-                     && pi.Name == nameof(Options.OAuthOptions.RedirectUrl))
+                    if (pi.DeclaringType == typeof(OAuthOptions))
                     {
-                        return "http://localhost:5000/oauth/";
+                        if (pi.PropertyType == typeof(string))
+                        {
+                            switch (pi.Name)
+                            {
+                                case nameof(Options.OAuthOptions.RedirectUrl):
+                                {
+                                    return "http://localhost:10000/oauth/";
+                                    break;
+                                }
+                                case nameof(Options.OAuthOptions.AuthBase):
+                                {
+                                    return "http://localhost:10001/oauth/authorize/";
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
 
