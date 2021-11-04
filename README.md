@@ -1,6 +1,5 @@
 # Mendeley SDK for C#
 
-![GitHub branch checks state](https://img.shields.io/github/checks-status/hughesjs/mendeleysdk/master?style=for-the-badge)
 ![GitHub top language](https://img.shields.io/github/languages/top/hughesjs/mendeleysdk?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/hughesjs/mendeleysdk?style=for-the-badge)
 ![Nuget](https://img.shields.io/nuget/dt/MendeleySdk?style=for-the-badge)
