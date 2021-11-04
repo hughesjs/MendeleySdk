@@ -4,6 +4,16 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>MendeleySdk</RootNamespace>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>0.0.1-alpha</PackageVersion>
+        <Title>MendeleySdk</Title>
+        <Authors>hughesjs</Authors>
+        <Description>C# SDK for the Mendeley API</Description>
+        <Copyright>AGPL 3.0</Copyright>
+        <PackageProjectUrl>https://github.com/hughesjs/MendeleySdk</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/hughesjs/MendeleySdk/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/hughesjs/MendeleySdk</RepositoryUrl>
+        <RepositoryType>Github</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
